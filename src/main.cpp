@@ -2253,10 +2253,20 @@ bool LoadBlockIndex(bool fAllowNew)
         }
 
         // Genesis block
-        const char* pszTimestamp = "icloud photo leak";
 
-        unsigned int nTimeGenesis = 1409634780;
-        unsigned int nNonceGenesis = 420830809;
+        /*
+         * TESTNET genesis block information:
+         *
+         * Genesis block hash=00000000d1a5c0f4b80aff780ddf479db83419a8b3152b4b1e4cdefcd379a93e
+         * Merkle root=34f470373cc43ba83252c9998f9c9e56892459909264f2504fac6927d543895c
+         * nTime=1410652426, nBits=1d0fffff, nNonce=571922346
+         * Coinbase(hash=34f470373c, nTime=1410652426, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+         */
+
+        const char* pszTimestamp = "Tim Draper: Bitcoin’s Price Still Headed to $10k 12 September 2014";
+
+        unsigned int nTimeGenesis = 1410652426;
+        unsigned int nNonceGenesis = 571922346;
 
         CTransaction txNew;
         txNew.nTime = nTimeGenesis;
@@ -2322,7 +2332,7 @@ bool LoadBlockIndex(bool fAllowNew)
         printf("%s\n", block.GetHash().ToString().c_str());
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0xd8a27282b405a58fe6d268e116bc514d7ab58980dd7d50c928e003651e8b5111"));
+        assert(block.hashMerkleRoot == uint256("0x34f470373cc43ba83252c9998f9c9e56892459909264f2504fac6927d543895c"));
         block.print();
 
         qDebug() << "block.GetHash = " << block.GetHash().ToString().c_str() << endl;

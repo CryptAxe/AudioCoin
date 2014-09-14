@@ -1,9 +1,9 @@
-Building Bitcoin
+Building AudioCoin
 
-See doc/readme-qt.rst for instructions on building Bitcoin QT,
+See doc/readme-qt.rst for instructions on building AudioCoin QT,
 the intended-for-end-users, nice-graphical-interface, reference
-implementation of Bitcoin.
+implementation of AudioCoin.
 
-See doc/build-*.txt for instructions on building bitcoind,
+See doc/build-*.txt for instructions on building AudioCoind,
 the intended-for-services, no-graphical-interface, reference
-implementation of Bitcoin.
+implementation of AudioCoin.
