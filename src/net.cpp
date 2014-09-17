@@ -991,7 +991,7 @@ void MapPort(bool /* unused fMapPort */)
 // testnet dns seed begins with 't', all else are ppcoin dns seeds.
 static const char *strDNSSeed[][2] = {
 
-    {"tseed", "192.168.0.196"},
+    {"oceanServer1", "104.131.14.164"},
     {"temp", ""},
 };
 
