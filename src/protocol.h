@@ -14,7 +14,6 @@
 #include "netbase.h"
 #include <string>
 #include "uint256.h"
-#include <QDebug>
 
 #define PPCOIN_PORT         22419
 #define RPC_PORT            22420
@@ -27,8 +26,6 @@ void GetMessageStart(unsigned char pchMessageStart[], bool fPersistent = false);
 
 static inline unsigned short GetDefaultPort(const bool testnet = fTestNet)
 {
-    qDebug() << "Returning port numbers! Testnet: " << TESTNET_PORT << endl;
-    qDebug() << "Live net port: " << PPCOIN_PORT << endl;
     return testnet ? TESTNET_PORT : PPCOIN_PORT;
 }
 

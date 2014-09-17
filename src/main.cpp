@@ -14,7 +14,6 @@
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
-#include <QDebug>
 
 using namespace std;
 using namespace boost;
@@ -428,7 +427,6 @@ int CMerkleTx::SetMerkleBranch(const CBlock* pblock)
 
 bool CTransaction::CheckTransaction() const
 {
-    qDebug() << "!!!CTransaction::CheckTransaction!!!\n";
     // Basic checks that don't depend on any context
     if (vin.empty())
         return DoS(10, error("CTransaction::CheckTransaction() : vin empty"));
@@ -466,14 +464,9 @@ bool CTransaction::CheckTransaction() const
 
     if (IsCoinBase())
     {
-        qDebug() << "!!!CTransaction::CheckTransaction Coinbase Script Size Check!!!\n";
         if (vin[0].scriptSig.size() < 2 || vin[0].scriptSig.size() > 100) {
-            qDebug() << "!!!CTransaction::CheckTransaction Coinbase Script Size Check FAILED!!!\n";
             return DoS(100, error("CTransaction::CheckTransaction() : coinbase script size"));
-        } else {
-            qDebug() << "!!!CTransaction::CheckTransaction Coinbase Script Size Check PASSED!!!\n";
         }
-
     }
     else
     {
@@ -481,9 +474,6 @@ bool CTransaction::CheckTransaction() const
             if (txin.prevout.IsNull())
                 return DoS(10, error("CTransaction::CheckTransaction() : prevout is null"));
     }
-
-    qDebug() << "!!!CTransaction::CheckTransaction END!!!\n";
-
     return true;
 }
 
@@ -1801,8 +1791,6 @@ bool CBlock::CheckBlock() const
     // These are checks that are independent of context
     // that can be verified before saving an orphan block.
 
-    qDebug() << "!!!Checking Block!!!\n";
-
     // Size limits
     if (vtx.empty() || vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return DoS(100, error("CheckBlock() : size limits failed"));
@@ -1845,27 +1833,17 @@ bool CBlock::CheckBlock() const
                    FormatMoney(vtx[0].GetValueOut()).c_str(),
                    FormatMoney(IsProofOfWork()? GetProofOfWorkReward(nBits) : 0).c_str()));
 
-
-
-    qDebug() << "!!!Checking Block::TRANSACTIONS!!!\n";
     // Check transactions
     BOOST_FOREACH(const CTransaction& tx, vtx)
     {
         if (!tx.CheckTransaction()) {
-            qDebug() << "!!!Checking Block::TRANSACTIONS HAS FAILED!!!\n";
             return DoS(tx.nDoS, error("CheckBlock() : CheckTransaction failed"));
-        } else {
-            qDebug() << "!!!Checking Block::TRANSACTIONS HAS SUCCEEDED!!!\n";
         }
 
         // AudioCoin: check transaction timestamp
         if (GetBlockTime() < (int64)tx.nTime) {
-            qDebug() << "!!!Checking Block::TRANSACTIONS timestamp check failed!!!\n";
             return DoS(50, error("CheckBlock() : block timestamp earlier than transaction timestamp"));
-        } else {
-            qDebug() << "!!!Checking Block::TRANSACTIONS timestamp check passed!!!\n";
         }
-
     }
 
 
@@ -2214,13 +2192,9 @@ FILE* AppendBlockFile(unsigned int& nFileRet)
 
 bool LoadBlockIndex(bool fAllowNew)
 {
-    qDebug() << "Loading Block Index\n";
-
     if (fTestNet)
     {
-        qDebug() << "LoadBlockIndex us using the testnet\n";
         hashGenesisBlock = hashGenesisBlockTestNet;
-        qDebug() << "LoadBlockIndex hashGenesisBlock set to: " << hashGenesisBlock.ToString().c_str() << endl;
         bnProofOfWorkLimit = CBigNum(~uint256(0) >> 28);
         nStakeMinAge = 60 * 60 * 24; // test net min age is 1 day
         nCoinbaseMaturity = 60;
@@ -2244,12 +2218,9 @@ bool LoadBlockIndex(bool fAllowNew)
     //
     if (mapBlockIndex.empty())
     {
-        qDebug() << "!!!Init with genesis block!!!\n";
         if (!fAllowNew) {
-            qDebug() << "!!!fAllowNew is false, returning false!!!\n";
             return false;
         } else {
-            qDebug() << "!!!fAllowNew is TRUE!!!\n";
         }
 
         // Genesis block
@@ -2314,16 +2285,10 @@ bool LoadBlockIndex(bool fAllowNew)
             printf("Merkle root=%s\n", block.hashMerkleRoot.ToString().c_str());
             block.print();
             printf("End genesis block\n");
-
-            qDebug() << "Genesis block found!: \n";
-            qDebug() << "Genesis block hash=%s\n" << block.GetHash().ToString().c_str();
-            qDebug() << "Merkle root=%s\n" << block.hashMerkleRoot.ToString().c_str();
-            qDebug() << "End genesis block\n";
         }
 
         if (fTestNet)
         {
-            qDebug() << "---TESTNET---\n";
             block.nTime    = nTimeGenesis;
             block.nNonce   = nNonceGenesis;
         }
@@ -2334,9 +2299,6 @@ bool LoadBlockIndex(bool fAllowNew)
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
         assert(block.hashMerkleRoot == uint256("0x34f470373cc43ba83252c9998f9c9e56892459909264f2504fac6927d543895c"));
         block.print();
-
-        qDebug() << "block.GetHash = " << block.GetHash().ToString().c_str() << endl;
-        qDebug() << "hashGenesisBlock = " << hashGenesisBlock.ToString().c_str() << endl;
 
         assert(block.GetHash() == hashGenesisBlock);
         assert(block.CheckBlock());
